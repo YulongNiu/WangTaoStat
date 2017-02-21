@@ -29,6 +29,12 @@ library('pander')
 library('ggplot2')
 ```
 
+# 年龄范围
+
+血透组：$57.9 \pm 13.4$
+
+腹透组：$51.3 \pm 13.2$
+
 # 血透/腹透25羟维生素D比较
 
 ## 数据处理和分析方法
@@ -157,37 +163,37 @@ summary(lm(PDa[, 1] ~ PDa[, 3]))
 25羟维生素D ～ 肌酐
 
 ```{r, echo=FALSE}
-summary(lm(PDa[, 1] ~ PDa[, 3]))
+summary(lm(PDa[, 1] ~ PDa[, 4]))
 ```
 
 `25羟维生素D ～ 钙
 
 ```{r, echo=FALSE}
-summary(lm(PDa[, 1] ~ PDa[, 4]))
+summary(lm(PDa[, 1] ~ PDa[, 5]))
 ```
 
 25羟维生素D ～ 磷
 
 ```{r, echo=FALSE}
-summary(lm(PDa[, 1] ~ PDa[, 5]))
+summary(lm(PDa[, 1] ~ PDa[, 6]))
 ```
 
 25羟维生素D ～ iPHT
 
 ```{r, echo=FALSE}
-summary(lm(PDa[, 1] ~ PDa[, 6]))
+summary(lm(PDa[, 1] ~ PDa[, 7]))
 ```
 
 25羟维生素D ～ C反应蛋白
 
 ```{r, echo=FALSE}
-summary(lm(PDa[, 1] ~ PDa[, 7]))
+summary(lm(PDa[, 1] ~ PDa[, 8]))
 ```
 
 25羟维生素D ～ BNP
 
 ```{r, echo=FALSE}
-summary(lm(PDa[, 1] ~ PDa[, 8]))
+summary(lm(PDa[, 1] ~ PDa[, 9]))
 ```
 
 血透组各指标拟合图
@@ -221,41 +227,41 @@ summary(lm(HDa[, 1] ~ HDa[, 3]))
 25羟维生素D ～ 肌酐
 
 ```{r, echo=FALSE}
-summary(lm(HDa[, 1] ~ HDa[, 3]))
+summary(lm(HDa[, 1] ~ HDa[, 4]))
 ```
 
 25羟维生素D ～ 钙
 
 ```{r, echo=FALSE}
-summary(lm(HDa[, 1] ~ HDa[, 4]))
+summary(lm(HDa[, 1] ~ HDa[, 5]))
 ```
 
 25羟维生素D ～ 磷
 
 ```{r, echo=FALSE}
-summary(lm(HDa[, 1] ~ HDa[, 5]))
+summary(lm(HDa[, 1] ~ HDa[, 6]))
 ```
 
 25羟维生素D ～ iPHT
 
 ```{r, echo=FALSE}
-summary(lm(HDa[, 1] ~ HDa[, 6]))
+summary(lm(HDa[, 1] ~ HDa[, 7]))
 ```
 
 25羟维生素D ～ C反应蛋白
 
 ```{r, echo=FALSE}
-summary(lm(HDa[, 1] ~ HDa[, 7]))
+summary(lm(HDa[, 1] ~ HDa[, 8]))
 ```
 
 25羟维生素D ～ BNP
 
 ```{r, echo=FALSE}
-summary(lm(HDa[, 1] ~ HDa[, 8]))
+summary(lm(HDa[, 1] ~ HDa[, 9]))
 ```
 
 # 个人建议
 
 + 最后一个分析，即维生素D与其他指标回归分析，结果作为参考。可以根据文献，尝试选择相关性更强的指标。
 
-+ 可以考虑多元线性回归。
++ 确定指标后，可以考虑多元线性回归。

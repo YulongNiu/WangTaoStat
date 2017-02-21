@@ -4,7 +4,7 @@ setwd('/home/Yulong/RESEARCH/WangTao/Rawdata/')
 PD <- read.csv('PD.csv')
 PD <- PD[, -2]
 PD[, 1] <- paste0('Name', 1:nrow(PD))
-colnames(PD) <- c('PatientName', 'Time', 'HydroxyVitaminD',
+colnames(PD) <- c('PatientName', 'age', 'Time', 'HydroxyVitaminD',
                   'BloodProtein', 'AlkalinePhosphatase', 'BloodUreaNitrogen',
                   'Creatinine', 'BloodUricAcid', 'Calcium', 'Phosphorum',
                   'iPHT', 'CReactiveProtein', 'BNP')
@@ -12,7 +12,7 @@ colnames(PD) <- c('PatientName', 'Time', 'HydroxyVitaminD',
 HD <- read.csv('HD.csv')
 HD <- HD[, -2]
 HD[, 1] <- paste0('Name', 1:nrow(HD))
-colnames(HD) <- c('PatientName', 'Time', 'HydroxyVitaminD',
+colnames(HD) <- c('PatientName', 'age', 'Time', 'HydroxyVitaminD',
                   'BlootProtein', 'AlkalinePhosphatase', 'BloodUreaNitrogen',
                   'Creatinine', 'BloodUricAcid', 'Calcium', 'Phosphorum',
                   'iPHT', 'CReactiveProtein', 'BNP')
@@ -130,7 +130,7 @@ load('PDHDprocess.RData')
 
 colName <- c('25羟维生素D', '白蛋白', '碱性磷酸酶', '肌酐', '钙', '磷', 'iPHT', 'C反应蛋白', 'BNP')
 
-PDa <- PD[, c(-1, -2, -6, -8)]
+PDa <- PD[, c(-1, -2, -3, -7, -9)]
 PDaObj <- lapply(2:length(colName), function(x) {
   ggplot(PDa, aes_string(colnames(PDa)[1], colnames(PDa)[x])) +
     geom_point() +
@@ -141,10 +141,10 @@ PDaObj <- lapply(2:length(colName), function(x) {
     ## geom_smooth(method = 'lm', se = FALSE)
 })
 
-PDaObjPlot <- marrangeGrob(grobs = PDaObj, nrow = 2, ncol = 4)
-ggsave(family='GB1', filename = 'PD_reg.pdf', plot = PDaObjPlot, width = 10, height = 5)
+PDaObjPlot <- marrangeGrob(grobs = PDaObj, nrow = 4, ncol = 2)
+ggsave(family='GB1', filename = 'PD_reg.pdf', plot = PDaObjPlot, width = 12, height = 10)
 
-HDa <- HD[, c(-1, -2, -6, -8)]
+HDa <- HD[, c(-1, -2, -3, -7, -9)]
 HDaObj <- lapply(2:length(colName), function(x) {
   ggplot(HDa, aes_string(colnames(HDa)[1], colnames(HDa)[x])) +
     geom_point() +
@@ -155,11 +155,8 @@ HDaObj <- lapply(2:length(colName), function(x) {
     ## geom_smooth(method = 'lm', se = FALSE)
 })
 
-HDaObjPlot <- marrangeGrob(grobs = HDaObj, nrow = 2, ncol = 4)
-ggsave(family='GB1', filename = 'HD_reg.pdf', plot = HDaObjPlot, width = 10, height = 5)
+HDaObjPlot <- marrangeGrob(grobs = HDaObj, nrow = 4, ncol = 2)
+ggsave(family='GB1', filename = 'HD_reg.pdf', plot = HDaObjPlot, width = 12, height = 10)
 
 summary(lm(PDa[, 1] ~ PDa[, 2]))
-
-
-
 #############################################################
