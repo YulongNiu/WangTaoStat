@@ -27,12 +27,12 @@ load('PDHDprocess.RData')
 
 vd <- data.frame(VD = c(PD[, 'HydroxyVitaminD'],
                         HD[, 'HydroxyVitaminD']),
-                 Group = rep(c('PD', 'HD'), c(nrow(PD), nrow(HD))))
+                 Group = rep(c('腹透', '血透'), c(nrow(PD), nrow(HD))))
 
 ggplot(vd, aes(Group, VD)) +
   geom_boxplot() +
   geom_jitter(width = 0.2) +
-  labs(title = '血透和腹透的25羟维生素D对比',
+  labs(title = '腹透和血透的25羟维生素D对比',
        x = '透析方法',
        y = '25羟维生素D水平') +
   theme(plot.title = element_text(hjust = 0.5))
@@ -88,11 +88,37 @@ TestPropor(decrease[1], patients[1], decrease[2], patients[2], method = 'binomia
 TestPropor(normal[1], patients[1], normal[2], patients[2], method = 'binomial')
 
 VDvalue <- c(PDvd, HDvd)
-VDlevel <- rep('decrease', PDn + HDn)
-VDlevel[VDvalue < 15] <- 'lack'
-VDlevel[VDvalue > 30] <- 'normal'
+VDlevel <- rep('降低', PDn + HDn)
+VDlevel[VDvalue < 15] <- '缺乏'
+VDlevel[VDvalue > 30] <- '正常'
 
 VDLevelMat <- data.frame(VD = VDvalue,
-                         Group = rep(c('PD', 'HD'), c(PDn, HDn)),
-                         Level = VDlevel)
+                         Group = rep(c('腹透', '血透'), c(PDn, HDn)),
+                         Level = factor(VDlevel))
+
+ggplot(VDLevelMat, aes(Group, VD)) +
+  geom_boxplot(aes(colour = Level))+
+  labs(title = '血透和腹透的25羟维生素D分组对比',
+       x = '透析方法',
+       y = '25羟维生素D水平') +
+  scale_colour_discrete(name = '25羟维生素D水平') +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(family='GB1', 'Vd_group_box.pdf')
+
+VDPerMat <- data.frame(Level = rep(c('缺乏', '降低', '正常'), each = 2),
+                       Percentage = c(lack/patients, decrease/patients, normal/patients),
+                       Group = rep(c('腹透', '血透'), 3))
+
+ggplot(VDPerMat, aes(x = Level, y = Percentage)) +
+  geom_bar(aes(fill = Group), position = 'dodge', stat = 'identity') +
+  labs(title = '血透和腹透的25羟维生素D比例对比',
+       x = '25羟维生素D水平') +
+  scale_y_continuous('比例', labels = scales::percent) +
+  scale_fill_discrete(name = '透析方法') +
+  theme(plot.title = element_text(hjust = 0.5))
+
+ggsave(family='GB1', 'Vd_group_bar.pdf')
+
+
 #############################################################

@@ -39,12 +39,13 @@ library('ggplot2')
 
 ## 结果
 
+腹透组和血透组的维生素D均值分别为`14.19`和`15.72`。
 
 ```{r, echo=FALSE}
 ggplot(vd, aes(Group, VD)) +
   geom_boxplot() +
   geom_jitter(width = 0.2) +
-  labs(title = '血透和腹透的25羟维生素D对比',
+  labs(title = '腹透和血透的25羟维生素D对比',
        x = '透析方法',
        y = '25羟维生素D水平') +
   theme(plot.title = element_text(hjust = 0.5))
@@ -73,20 +74,41 @@ wilcox.test(PD[, 'HydroxyVitaminD'], HD[, 'HydroxyVitaminD'])
 
 ## 结果
 
-维生素D缺乏（`<15ng/ml`），`p1`和`p2`分别表示在腹透组和血透组中，符合选择条件的样本所占比例。
 
 ```{r, echo=FALSE}
-TestPropor(lack[1], patients[1], lack[2], patients[2])
+ggplot(VDLevelMat, aes(Group, VD)) +
+  geom_boxplot(aes(colour = Level))+
+  labs(title = '血透和腹透的25羟维生素D分组对比',
+       x = '透析方法',
+       y = '25羟维生素D水平') +
+  scale_colour_discrete(name = '25羟维生素D水平') +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r, echo=FALSE}
+ggplot(VDPerMat, aes(x = Level, y = Percentage)) +
+  geom_bar(aes(fill = Group), position = 'dodge', stat = 'identity') +
+  labs(title = '血透和腹透的25羟维生素D比例对比',
+       x = '25羟维生素D水平') +
+  scale_y_continuous('比例', labels = scales::percent) +
+  scale_fill_discrete(name = '透析方法') +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+维生素D缺乏（`<15ng/ml`），`p1`和`p2`分别表示在血透组和腹透组中，符合选择条件的样本所占比例。
+
+```{r, echo=FALSE}
+TestPropor(lack[2], patients[2], lack[1], patients[1])
 ```
 
 维生素D降低（`15ng/ml ~ 30ng/ml`）
 
 ```{r, echo=FALSE}
-TestPropor(decrease[1], patients[1], decrease[2], patients[2])
+TestPropor(decrease[2], patients[2], decrease[1], patients[1])
 ```
 
 维生素D正常（`>30ng/ml`）
 
 ```{r, echo=FALSE}
-TestPropor(normal[1], patients[1], normal[2], patients[2])
+TestPropor(normal[2], patients[2], normal[1], patients[1])
 ```
