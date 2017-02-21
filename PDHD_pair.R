@@ -5,7 +5,7 @@ PD <- read.csv('PD.csv')
 PD <- PD[, -2]
 PD[, 1] <- paste0('Name', 1:nrow(PD))
 colnames(PD) <- c('PatientName', 'Time', 'HydroxyVitaminD',
-                  'BlootProtein', 'AlkalinePhosphatase', 'BloodUreaNitrogen',
+                  'BloodProtein', 'AlkalinePhosphatase', 'BloodUreaNitrogen',
                   'Creatinine', 'BloodUricAcid', 'Calcium', 'Phosphorum',
                   'iPHT', 'CReactiveProtein', 'BNP')
 
@@ -119,6 +119,47 @@ ggplot(VDPerMat, aes(x = Level, y = Percentage)) +
   theme(plot.title = element_text(hjust = 0.5))
 
 ggsave(family='GB1', 'Vd_group_bar.pdf')
+#############################################################
+
+############################lm anlaysis######################
+library('ggplot2')
+library('reshape2')
+library('gridExtra')
+
+load('PDHDprocess.RData')
+
+colName <- c('25羟维生素D', '白蛋白', '碱性磷酸酶', '肌酐', '钙', '磷', 'iPHT', 'C反应蛋白', 'BNP')
+
+PDa <- PD[, c(-1, -2, -6, -8)]
+PDaObj <- lapply(2:length(colName), function(x) {
+  ggplot(PDa, aes_string(colnames(PDa)[1], colnames(PDa)[x])) +
+    geom_point() +
+    geom_smooth(span = 0.3) +
+    labs(x = colName[1],
+         y = colName[x]) +
+    theme(plot.title = element_text(hjust = 0.5))
+    ## geom_smooth(method = 'lm', se = FALSE)
+})
+
+PDaObjPlot <- marrangeGrob(grobs = PDaObj, nrow = 2, ncol = 4)
+ggsave(family='GB1', filename = 'PD_reg.pdf', plot = PDaObjPlot, width = 10, height = 5)
+
+HDa <- HD[, c(-1, -2, -6, -8)]
+HDaObj <- lapply(2:length(colName), function(x) {
+  ggplot(HDa, aes_string(colnames(HDa)[1], colnames(HDa)[x])) +
+    geom_point() +
+    geom_smooth(span = 0.3) +
+    labs(x = colName[1],
+         y = colName[x]) +
+    theme(plot.title = element_text(hjust = 0.5))
+    ## geom_smooth(method = 'lm', se = FALSE)
+})
+
+HDaObjPlot <- marrangeGrob(grobs = HDaObj, nrow = 2, ncol = 4)
+ggsave(family='GB1', filename = 'HD_reg.pdf', plot = HDaObjPlot, width = 10, height = 5)
+
+summary(lm(PDa[, 1] ~ PDa[, 2]))
+
 
 
 #############################################################

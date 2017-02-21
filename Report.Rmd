@@ -112,3 +112,150 @@ TestPropor(decrease[2], patients[2], decrease[1], patients[1])
 ```{r, echo=FALSE}
 TestPropor(normal[2], patients[2], normal[1], patients[1])
 ```
+
+维生素D正常水平在两组中有显著差异。
+
+
+# 维生素D与其他指标回归分析
+
+## 数据处理和分析方法
+
+每个指标与维生素D水平单独做线性回归。
+
+## 结果
+
+图中的曲线拟合方法是[LOESS曲线拟合](https://en.wikipedia.org/wiki/Local_regression)。
+
+腹透组各指标拟合图
+
+```{r, echo=FALSE, fig.width=12, fig.height=10}
+PDaObj <- lapply(2:length(colName), function(x) {
+  ggplot(PDa, aes_string(colnames(PDa)[1], colnames(PDa)[x])) +
+    geom_point() +
+    geom_smooth(span = 0.3) +
+    labs(x = colName[1],
+         y = colName[x]) +
+    theme(plot.title = element_text(hjust = 0.5))
+    ## geom_smooth(method = 'lm', se = FALSE)
+})
+
+grid.arrange(grobs = PDaObj, nrow = 4, ncol = 2)
+```
+
+25羟维生素D ～ 白蛋白
+
+```{r, echo=FALSE}
+summary(lm(PDa[, 1] ~ PDa[, 2]))
+```
+
+25羟维生素D ～ 碱性磷酸酶
+
+```{r, echo=FALSE}
+summary(lm(PDa[, 1] ~ PDa[, 3]))
+```
+
+25羟维生素D ～ 肌酐
+
+```{r, echo=FALSE}
+summary(lm(PDa[, 1] ~ PDa[, 3]))
+```
+
+`25羟维生素D ～ 钙
+
+```{r, echo=FALSE}
+summary(lm(PDa[, 1] ~ PDa[, 4]))
+```
+
+25羟维生素D ～ 磷
+
+```{r, echo=FALSE}
+summary(lm(PDa[, 1] ~ PDa[, 5]))
+```
+
+25羟维生素D ～ iPHT
+
+```{r, echo=FALSE}
+summary(lm(PDa[, 1] ~ PDa[, 6]))
+```
+
+25羟维生素D ～ C反应蛋白
+
+```{r, echo=FALSE}
+summary(lm(PDa[, 1] ~ PDa[, 7]))
+```
+
+25羟维生素D ～ BNP
+
+```{r, echo=FALSE}
+summary(lm(PDa[, 1] ~ PDa[, 8]))
+```
+
+血透组各指标拟合图
+
+```{r, echo=FALSE, fig.width=12, fig.height=10}
+HDaObj <- lapply(2:length(colName), function(x) {
+  ggplot(HDa, aes_string(colnames(HDa)[1], colnames(HDa)[x])) +
+    geom_point() +
+    geom_smooth(span = 0.3) +
+    labs(x = colName[1],
+         y = colName[x]) +
+    theme(plot.title = element_text(hjust = 0.5))
+    ## geom_smooth(method = 'lm', se = FALSE)
+})
+
+grid.arrange(grobs = HDaObj, nrow = 4, ncol = 2)
+```
+
+25羟维生素D ～ 白蛋白
+
+```{r, echo=FALSE}
+summary(lm(HDa[, 1] ~ HDa[, 2]))
+```
+
+25羟维生素D ～ 碱性磷酸酶
+
+```{r, echo=FALSE}
+summary(lm(HDa[, 1] ~ HDa[, 3]))
+```
+
+25羟维生素D ～ 肌酐
+
+```{r, echo=FALSE}
+summary(lm(HDa[, 1] ~ HDa[, 3]))
+```
+
+25羟维生素D ～ 钙
+
+```{r, echo=FALSE}
+summary(lm(HDa[, 1] ~ HDa[, 4]))
+```
+
+25羟维生素D ～ 磷
+
+```{r, echo=FALSE}
+summary(lm(HDa[, 1] ~ HDa[, 5]))
+```
+
+25羟维生素D ～ iPHT
+
+```{r, echo=FALSE}
+summary(lm(HDa[, 1] ~ HDa[, 6]))
+```
+
+25羟维生素D ～ C反应蛋白
+
+```{r, echo=FALSE}
+summary(lm(HDa[, 1] ~ HDa[, 7]))
+```
+
+25羟维生素D ～ BNP
+
+```{r, echo=FALSE}
+summary(lm(HDa[, 1] ~ HDa[, 8]))
+```
+
+# 个人建议
+
++ 最后一个分析，即维生素D与其他指标回归分析，结果作为参考。可以根据文献，尝试选择相关性更强的指标。
+
++ 可以考虑多元线性回归。
