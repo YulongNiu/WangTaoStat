@@ -1,1 +1,32 @@
- 
+---
+title: "腹透血透指标分析报告"
+author: "Yulong Niu\\
+
+        yulong.niu@aol.com"
+date: "`r Sys.Date()`"
+bibliography: PDHD.bib
+csl: nature.csl
+output: 
+  prettydoc::html_pretty:
+    toc: true
+    theme: tactile
+    highlight: github
+  pdf_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{腹透血透指标分析报告}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+```{r style, echo=FALSE, results="asis", message=FALSE}
+knitr::opts_chunk$set(tidy = FALSE,
+		   message = FALSE)
+```
+
+```{r echo=FALSE, results="hide", message=FALSE}
+library('pander')
+```
+
+
+

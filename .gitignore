@@ -4,6 +4,7 @@
 .Rbuildignore
 .Rproj.user/
 .directory
+.RData
 
 # object and shared objects
 *.o
@@ -19,5 +20,7 @@
 # office files
 *.xls
 *.doc
+*.doc#
+*.csv
 
 nohup.out
