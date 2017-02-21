@@ -4,7 +4,7 @@
 .Rbuildignore
 .Rproj.user/
 .directory
-.RData
+*.RData
 
 # object and shared objects
 *.o
