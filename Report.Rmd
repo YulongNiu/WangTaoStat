@@ -26,7 +26,67 @@ knitr::opts_chunk$set(tidy = FALSE,
 
 ```{r echo=FALSE, results="hide", message=FALSE}
 library('pander')
+library('ggplot2')
 ```
 
+# 血透/腹透25羟维生素D比较
+
+## 数据处理和分析方法
+
+1. 维生素D对应数据存在不确定值，比如腹透`<4.2`等。为了减小不确定值带来的偏差，这类数值都取上限，比如`<4.2`取为`4.2`。其他指标数据也按类似方法处理。
+
+2. 由于维生素D数据分布未知，所以分别使用双尾[Student's *t*-test](https://en.wikipedia.org/wiki/Student's_t-test)和双尾[Mann–Whitney *U* test](https://en.wikipedia.org/wiki/Student's_t-test)。
+
+## 结果
 
 
+```{r, echo=FALSE}
+ggplot(vd, aes(Group, VD)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2) +
+  labs(title = '血透和腹透的25羟维生素D对比',
+       x = '透析方法',
+       y = '25羟维生素D水平') +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+Student's *t*-test结果：
+
+```{r, echo=FALSE}
+load('PDHDprocess.RData')
+t.test(PD[, 'HydroxyVitaminD'], HD[, 'HydroxyVitaminD'])
+```
+
+Mann–Whitney *U* test结果：
+
+```{r, echo=FALSE}
+wilcox.test(PD[, 'HydroxyVitaminD'], HD[, 'HydroxyVitaminD'])
+```
+
+两种分析方法的`p-value`都不具有显著性，所以没有充足的理由判断两组维生素D水平有差异。
+
+# 患者中维生素D比例差异
+
+## 数据处理和分析方法
+
+使用双尾[proportions test](http://www.dummies.com/education/math/statistics/how-to-compare-two-population-proportions/)检测三个划分条件下两组比例差异。
+
+## 结果
+
+维生素D缺乏（`<15ng/ml`），`p1`和`p2`分别表示在腹透组和血透组中，符合选择条件的样本所占比例。
+
+```{r, echo=FALSE}
+TestPropor(lack[1], patients[1], lack[2], patients[2])
+```
+
+维生素D降低（`15ng/ml ~ 30ng/ml`）
+
+```{r, echo=FALSE}
+TestPropor(decrease[1], patients[1], decrease[2], patients[2])
+```
+
+维生素D正常（`>30ng/ml`）
+
+```{r, echo=FALSE}
+TestPropor(normal[1], patients[1], normal[2], patients[2])
+```

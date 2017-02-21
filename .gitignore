@@ -21,6 +21,8 @@
 *.xls
 *.doc
 *.doc#
+*.xls#
 *.csv
+*.pdf
 
 nohup.out
