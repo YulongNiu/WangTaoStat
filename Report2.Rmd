@@ -1,0 +1,106 @@
+---
+title: "腹透血透指标多元回归尝试"
+author: "Yulong Niu\\
+
+        yulong.niu@aol.com"
+date: "`r Sys.Date()`"
+bibliography: PDHD.bib
+csl: nature.csl
+output: 
+  prettydoc::html_pretty:
+    toc: true
+    theme: tactile
+    highlight: github
+  pdf_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{腹透血透指标多元回归尝试}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+```{r style, echo=FALSE, results="asis", message=FALSE}
+knitr::opts_chunk$set(tidy = FALSE,
+		   message = FALSE)
+```
+
+```{r echo=FALSE, results="hide", message=FALSE}
+library('pander')
+library('ggplot2')
+```
+
+# 多元回归分析
+
+## 数据处理和分析方法
+
+模仿发送的文章，尝试使用[多元回归](http://www.stat.yale.edu/Courses/1997-98/101/linmult.htm)分析维生素D和其他指标关系。
+
+## 结果
+
+指标名称对应：
+
+`HydroxyVitaminD`：25羟维生素D
+
+`BloodProtein`：白蛋白
+
+`AlkalinePhosphatase`：碱性磷酸酶
+
+`Creatinine`：肌酐
+
+`Calcium`：血钙
+
+`Phosphorum`：血磷
+
+`iPHT`：iPHT
+
+`CReactiveProtein`：C反应蛋白
+
+`BNP`：BNP
+
+腹透组
+
+```{r, echo=FALSE}
+lmPDa <- lm(HydroxyVitaminD ~ BloodProtein + AlkalinePhosphatase + Creatinine + Calcium + Phosphorum + iPHT + CReactiveProtein + BNP, data = PDa)
+summary(lmPDa)
+```
+
+回归系数：
+
+```{r, echo=FALSE}
+lmPDa
+```
+
+
+从目前数据来看，只有血钙可能和维生素D有较显著负相关（`t=-1.977`，`p=0.0545`），回归系数为`-0.127`。
+
+之后，采用逐步回归，探索各个指标对回归方程的影响。
+
+```{r, echo=FALSE}
+step(lmPDa)
+```
+
+可以看到单一指标中，血钙与和维生素D相关性较高；增加指标后，只有血钙和iPHT的组合会提升模型，其他指标对模型贡献很小。
+
+血透组
+
+```{r, echo=FALSE}
+lmHDa <- lm(HydroxyVitaminD ~ BloodProtein + AlkalinePhosphatase + Creatinine + Calcium + Phosphorum + iPHT + CReactiveProtein + BNP, data = HDa)
+summary(lmHDa)
+```
+
+回归系数：
+
+```{r, echo=FALSE}
+lmHDa
+```
+
+血透组中，白蛋白（`t=1.757`，`p=0.0849`，回归系数`0.5503`）、肌酐（`t=1.820`，`p=0.0747`，回归系数`0.0075`）和BNP（`t=3.238`，`p=0.002`、回归系数`0.0022`）可能和维生素D有较显著负相关。
+
+之后，采用逐步回归，探索各个指标对回归方程的影响。
+
+```{r, echo=FALSE}
+step(lmHDa)
+```
+
+增加指标后，只有白蛋白、肌酐和BNP的组合会提升模型，其他指标对模型贡献很小。
+

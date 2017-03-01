@@ -1,4 +1,4 @@
-setwd('/home/Yulong/RESEARCH/WangTao/Rawdata/')
+setwd('/home/Yulong/RESEARCH/WangTaoStat')
 
 ##################### deal with data ###################
 PD <- read.csv('PD.csv')
@@ -13,7 +13,7 @@ HD <- read.csv('HD.csv')
 HD <- HD[, -2]
 HD[, 1] <- paste0('Name', 1:nrow(HD))
 colnames(HD) <- c('PatientName', 'age', 'Time', 'HydroxyVitaminD',
-                  'BlootProtein', 'AlkalinePhosphatase', 'BloodUreaNitrogen',
+                  'BloodProtein', 'AlkalinePhosphatase', 'BloodUreaNitrogen',
                   'Creatinine', 'BloodUricAcid', 'Calcium', 'Phosphorum',
                   'iPHT', 'CReactiveProtein', 'BNP')
 
@@ -159,4 +159,19 @@ HDaObjPlot <- marrangeGrob(grobs = HDaObj, nrow = 4, ncol = 2)
 ggsave(family='GB1', filename = 'HD_reg.pdf', plot = HDaObjPlot, width = 12, height = 10)
 
 summary(lm(PDa[, 1] ~ PDa[, 2]))
+#############################################################
+
+
+############################lm anlaysis######################
+load('PDHDprocess.RData')
+
+PDa <- PD[, c(-1, -2, -3, -7, -9)]
+lmPDa <- lm(HydroxyVitaminD ~ BloodProtein + AlkalinePhosphatase + Creatinine + Calcium + Phosphorum + iPHT + CReactiveProtein + BNP, data = PDa)
+summary(lmPDa)
+step(lmPDa)
+
+HDa <- HD[, c(-1, -2, -3, -7, -9)]
+lmHDa <- lm(HydroxyVitaminD ~ BloodProtein + AlkalinePhosphatase + Creatinine + Calcium + Phosphorum + iPHT + CReactiveProtein + BNP, data = HDa)
+summary(lmHDa)
+step(lmHDa)
 #############################################################
