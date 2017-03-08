@@ -1,0 +1,68 @@
+---
+title: "整合两组指标多元回归尝试"
+author: "Yulong Niu\\
+
+        yulong.niu@aol.com"
+date: "`r Sys.Date()`"
+bibliography: PDHD.bib
+csl: nature.csl
+output: 
+  prettydoc::html_pretty:
+    toc: true
+    theme: tactile
+    highlight: github
+  pdf_document:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{腹透血透指标多元回归尝试}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+```{r style, echo=FALSE, results="asis", message=FALSE}
+knitr::opts_chunk$set(tidy = FALSE,
+		   message = FALSE)
+```
+
+```{r echo=FALSE, results="hide", message=FALSE}
+library('pander')
+library('ggplot2')
+```
+
+# 整合腹透和血透组多元回归分析
+
+## 数据处理和分析方法
+
+合并腹透组和血透组数据，之后做多元回归分析。
+
+## 结果
+
+指标名称对应参考报告2。
+
+合并两组
+
+```{r, echo=FALSE}
+load('PDHDprocess.RData')
+PDa <- PD[, c(-1, -2, -3, -7, -9)]
+HDa <- HD[, c(-1, -2, -3, -7, -9)]
+comba <- rbind(PDa, HDa)
+
+lmcomba <- lm(HydroxyVitaminD ~ BloodProtein + AlkalinePhosphatase + Creatinine + Calcium + Phosphorum + iPHT + CReactiveProtein + BNP, data = comba)
+summary(lmcomba)
+```
+
+回归系数：
+
+```{r, echo=FALSE}
+lmcomba
+```
+
+整合两组数据后，看到BNP与维生素D有显著相关性（`t=2.469`，`p=0.0152`、回归系数`0.0015`）。
+
+之后，采用逐步回归，探索各个指标对回归方程的影响。
+
+```{r, echo=FALSE}
+step(lmcomba)
+```
+
+增加指标后，白蛋白和BNP的组合会提升模型，其他指标对模型贡献很小。
